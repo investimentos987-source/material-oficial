@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ============================================================
+   TOKENS DE TEMA  ·  claro / escuro
+   ============================================================ */
+:root,
+html[data-theme="dark"] {
+  --bg: #0a0910;
+  --bg-2: #0d0c14;
+  --bg-hero-fade: rgba(10, 9, 16, 1);
+  --bg-hero-fade-0: rgba(10, 9, 16, 0.6);
+
+  --surface: rgba(255, 255, 255, 0.025);
+  --surface-2: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-soft: rgba(255, 255, 255, 0.06);
+
+  --text: #f4f1ea;
+  --text-body: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --text-faint: #71717a;
+
+  --accent: #fde047; /* amarelo */
+  --accent-2: #fbbf24;
+  --accent-ink: #0a0910;
+  --accent-soft: rgba(253, 224, 71, 0.07);
+  --accent-border: rgba(253, 224, 71, 0.3);
+
+  --grid-line: rgba(244, 241, 234, 0.035);
+  --ghost-stroke: rgba(244, 241, 234, 0.14);
+  --noise-opacity: 0.05;
+  --scroll-track: #0a0910;
+  --scroll-thumb: #2a2733;
+
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --bg: #f5f2ea;
+  --bg-2: #fffdf7;
+  --bg-hero-fade: rgba(245, 242, 234, 1);
+  --bg-hero-fade-0: rgba(245, 242, 234, 0.55);
+
+  --surface: rgba(24, 20, 14, 0.03);
+  --surface-2: rgba(24, 20, 14, 0.05);
+  --surface-strong: rgba(24, 20, 14, 0.07);
+  --border: rgba(24, 20, 14, 0.12);
+  --border-soft: rgba(24, 20, 14, 0.09);
+
+  --text: #1b1710;
+  --text-body: #3c372f;
+  --text-muted: #6b6459;
+  --text-faint: #8a8377;
+
+  --accent: #d97706; /* âmbar mais escuro p/ contraste */
+  --accent-2: #b45309;
+  --accent-ink: #fffdf7;
+  --accent-soft: rgba(217, 119, 6, 0.09);
+  --accent-border: rgba(217, 119, 6, 0.32);
+
+  --grid-line: rgba(24, 20, 14, 0.05);
+  --ghost-stroke: rgba(24, 20, 14, 0.16);
+  --noise-opacity: 0.025;
+  --scroll-track: #ece7dc;
+  --scroll-thumb: #cbc3b3;
+
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 8px;
+  border: 2px solid var(--scroll-track);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+section[id] {
+  scroll-margin-top: 92px;
+}
+
+/* ---- utilitários semânticos de tema ---- */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.app-bg { background-color: var(--bg); }
+.app-bg-2 { background-color: var(--bg-2); }
+.surface { background-color: var(--surface); }
+.surface-2 { background-color: var(--surface-2); }
+.surface-strong { background-color: var(--surface-strong); }
+.border-app { border-color: var(--border); }
+.border-app-soft { border-color: var(--border-soft); }
+.text-strong { color: var(--text); }
+.text-body { color: var(--text-body); }
+.text-muted { color: var(--text-muted); }
+.text-faint { color: var(--text-faint); }
+.text-accent { color: var(--accent); }
+.bg-accent { background-color: var(--accent); }
+.text-accent-ink { color: var(--accent-ink); }
+.border-accent { border-color: var(--accent-border); }
+.bg-accent-soft { background-color: var(--accent-soft); }
+
+/* ---- paper grid backdrop ---- */
+.bg-blueprint {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.noise::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- marca-texto (highlighter) ---- */
+.hl {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  border-radius: 0.3rem;
+  padding: 0.05rem 0.35rem;
+  font-weight: 600;
+}
+.hl-y {
+  background: rgba(253, 224, 71, 0.16);
+  color: #a86a00;
+  box-shadow: inset 0 -2px 0 rgba(253, 224, 71, 0.55);
+}
+html[data-theme="dark"] .hl-y { color: #fef08a; }
+.hl-c {
+  background: rgba(6, 182, 212, 0.14);
+  color: #0e7490;
+  box-shadow: inset 0 -2px 0 rgba(6, 182, 212, 0.45);
+}
+html[data-theme="dark"] .hl-c { color: #a5f3fc; }
+.hl-v {
+  background: rgba(139, 92, 246, 0.14);
+  color: #6d28d9;
+  box-shadow: inset 0 -2px 0 rgba(139, 92, 246, 0.45);
+}
+html[data-theme="dark"] .hl-v { color: #ddd6fe; }
+.hl-e {
+  background: rgba(16, 185, 129, 0.14);
+  color: #047857;
+  box-shadow: inset 0 -2px 0 rgba(16, 185, 129, 0.45);
+}
+html[data-theme="dark"] .hl-e { color: #a7f3d0; }
+.hl-r {
+  background: rgba(244, 63, 94, 0.13);
+  color: #be123c;
+  box-shadow: inset 0 -2px 0 rgba(244, 63, 94, 0.5);
+}
+html[data-theme="dark"] .hl-r { color: #fecdd3; }
+
+/* ---- marquee ---- */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+/* ---- big ghost numeral ---- */
+.ghost-num {
+  -webkit-text-stroke: 1.5px var(--ghost-stroke);
+  color: transparent;
+  line-height: 0.8;
+  user-select: none;
+}
+
+/* ---- dotted leader for TOC ---- */
+.toc-link {
+  transition: color 0.25s ease, padding-left 0.25s ease;
+}
+.toc-link.active {
+  color: var(--accent);
+  padding-left: 0.75rem;
+}
+.toc-link.active .toc-dot {
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-border);
+}
+
+/* ---- corpo didático: alinhamento justificado ---- */
+.study-content p,
+.study-content li,
+.study-content dd,
+.study-content td,
+.study-content th {
+  text-align: justify;
+  text-justify: inter-word;
+}
+.study-content .lead,
+.study-content .sec-lead,
+.hero-desc,
+.q-comentario,
+.q-enunciado,
+.callout-text,
+.card-text {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+.study-content code,
+.study-content pre,
+.study-content .font-mono,
+.study-content .no-justify,
+.study-content .no-justify * {
+  text-align: left;
+}
+
+/* ===== Lei seca: fonte maior e mais espaçada ===== */
+section[id^="leiseca"] dl > div {
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+}
+section[id^="leiseca"] dt {
+  font-size: 15.5px !important;
+  line-height: 1.75 !important;
+  letter-spacing: 0.01em;
+}
+section[id^="leiseca"] dd {
+  font-size: 16px !important;
+  line-height: 2 !important;
+  letter-spacing: 0.01em;
+}
+section[id^="leiseca"] p,
+section[id^="leiseca"] li {
+  font-size: 15.5px;
+  line-height: 1.95;
+}
